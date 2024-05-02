@@ -21,7 +21,7 @@
 
  
 ## 변경 사항
-**플라스크 프로젝트**(https://github.com/VerifiedIdiot/daily_weather_function_flask)에서 다음과 같은 환경을 통해 이식하였음
+**플라스크 프로젝트**(https://github.com/VerifiedIdiot/daily_weather_function_flask) 에서 다음과 같은 환경을 통해 이식하였음
 - Java 17
 - Spring Boot 3.2.5
 - RestClient 
