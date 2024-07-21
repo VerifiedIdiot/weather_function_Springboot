@@ -1,17 +1,18 @@
-package com.highlight.weather.refactored.dto;
+package com.highlight.weather.refactored.dto.weekly;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.highlight.weather.refactored.entity.Weather;
+import com.highlight.weather.refactored.entity.WeeklyWeather;
 import com.highlight.weather.refactored.utils.Views;
 import lombok.*;
 
 
-@Getter @Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WeatherDto {
+public class WeeklyWeatherDto {
 
 
     private long id;
@@ -31,8 +32,9 @@ public class WeatherDto {
     private int afternoonRainPercent;
     @JsonView(Views.Public.class)
     private String afternoonWeatherCondition;
-    public Weather toEntity() {
-        return Weather.builder()
+
+    public WeeklyWeather toEntity() {
+        return WeeklyWeather.builder()
                 .region(this.getRegion())
                 .weatherDate(this.getWeatherDate())
                 .morningTemperature(this.getMorningTemperature())

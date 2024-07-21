@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 
 
-
-@Getter @Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +32,7 @@ public class WeatherDto {
     private int afternoonRainPercent;
     @JsonView(Views.Public.class)
     private String afternoonWeatherCondition;
+
     public Weather toEntity() {
         return Weather.builder()
                 .region(this.getRegion())

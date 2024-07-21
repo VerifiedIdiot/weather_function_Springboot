@@ -1,11 +1,13 @@
 package com.highlight.weather.refactored.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.highlight.weather.refactored.service.weather.CompleteWeatherService;
-import com.highlight.weather.refactored.service.weather.MiddleWeatherService;
-import com.highlight.weather.refactored.service.weather.ShortWeatherService;
-import com.highlight.weather.refactored.service.weather.WeatherDataSaveService;
+import com.highlight.weather.refactored.service.weekly.CompleteWeatherService;
+import com.highlight.weather.refactored.service.weekly.MiddleWeatherService;
+import com.highlight.weather.refactored.service.weekly.ShortWeatherService;
+import com.highlight.weather.refactored.service.weekly.WeatherDataSaveService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,14 +29,14 @@ public class Scheduler {
     private final WeatherDataSaveService weatherDataSaveService;
     private final CacheManager cacheManager;
 
+    private final Logger logger = LogManager.getLogger(this.getClass());
+
     // 초 분 시 일 월 요일
     @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
     public void executeWeatherTasks() throws JsonProcessingException {
         try {
-            System.out.println("날씨 스케쥴러 시작 ! ! ! !");
+            logger.info("날씨 스케쥴러 시작 ! ! ! !");
             // 데이터 insert하기전 날씨테이블의 모든 레코드 삭제 , 이는 최신화된 정보만 보관을 위함
-
-
             // 지역별 코드
             Map<String, String> locationCode = shortWeatherService.getLocationCode();
 
@@ -48,11 +50,11 @@ public class Scheduler {
 
             // 단기예보 + 중기예보
             Map<String, List<List<String>>> completeWeather = completeWeatherService.getCompleteWeather(completeShort, completeMiddle);
-//            weatherDataSaveService.deleteAllWeatherData();
+
             // 각 도시별 일주일 날씨 정보 db에 insert
             weatherDataSaveService.saveWeatherData(completeWeather);
             cacheManager.getCache("weather").clear();
-            System.out.println("날씨 정보 insert 작동 ! ! ! ! !");
+            logger.info("날씨 정보 insert 작동 ! ! ! ! !");
         } catch (ResourceAccessException e) {
             // 로그에 예외 정보 기록
             e.printStackTrace();

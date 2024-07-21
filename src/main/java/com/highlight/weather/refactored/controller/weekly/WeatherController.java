@@ -1,26 +1,29 @@
-package com.highlight.weather.refactored.controller;
+package com.highlight.weather.refactored.controller.weekly;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.highlight.weather.refactored.dto.WeatherDto;
-import com.highlight.weather.refactored.service.weather.*;
+import com.highlight.weather.refactored.dto.weekly.WeeklyWeatherDto;
+import com.highlight.weather.refactored.service.weekly.*;
 import com.highlight.weather.refactored.utils.Views;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-@Slf4j
+
+
+
 @Tag(name = "날씨_refactored", description = "날씨 관련 API_refactored")
 @RestController
 @Controller("refactoredWeatherController")
 @RequiredArgsConstructor
-@RequestMapping("/weather-refactored")
+@RequestMapping("/refactored-weekly")
 public class WeatherController {
 
 
@@ -29,18 +32,7 @@ public class WeatherController {
     private final CompleteWeatherService completeWeatherService;
     private final WeatherDataSaveService weatherDataSaveService;
     private final WeatherToFrontService weatherToFrontService;
-
-
-//    @GetMapping("/get-by-client")
-//    @Operation(summary = "RestClient 확인용", description = "RestTemplate 대신 RestClient를 사용하여 API를 사용해봅니다")
-//    public ResponseEntity<?> getByRestClient () {
-//
-//        Map<String, String> locationCode = restClientService.getCodes();
-//        return ResponseEntity.ok(locationCode);
-//    }
-
-
-
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Operation(
             summary = "날씨데이터 Insert",
@@ -55,7 +47,6 @@ public class WeatherController {
     @PostMapping("/insert")
     public ResponseEntity<?> insertForcasts() {
         try {
-            System.out.println("대한민국 날씨정보 insert 시작");
             // 시간을 기록하기위한 시간 메서드
             long startTime = System.currentTimeMillis();
             // 지역별 코드
@@ -69,7 +60,7 @@ public class WeatherController {
 //            Map<String, String> locationCode = middleWeatherService.getLocationCode();
             Map<String, List<List<String>>> middleTemp = middleWeatherService.getMiddleTemp(locationCode);
             Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition(locationCode);
-            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp,middleCondition);
+            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
 
 //             단기예보 + 중기예보
             Map<String, List<List<String>>> completeWeather = completeWeatherService.getCompleteWeather(completeShort, completeMiddle);
@@ -79,7 +70,7 @@ public class WeatherController {
 
             long endTime = System.currentTimeMillis();
             long duration = (endTime - startTime) / 1000;
-            System.out.println("Duration: " + duration + " seconds");
+            logger.info("Duration: " + duration + " seconds");
             return ResponseEntity.ok(completeWeather);
 
         } catch (Exception e) {
@@ -93,9 +84,9 @@ public class WeatherController {
     @GetMapping("/get")
     @Operation(summary = "날씨정보 조회", description = "데이터베이스에서 일주일에 해당하는 날씨정보를 요청 및 조회합니다.")
     @JsonView(Views.Public.class)
-    public ResponseEntity<Map<String, List<WeatherDto>>> getForcasts () {
+    public ResponseEntity<Map<String, List<WeeklyWeatherDto>>> getForcasts() {
 
-        Map<String, List<WeatherDto>> weeklyWeather = weatherToFrontService.getWeatherData();
+        Map<String, List<WeeklyWeatherDto>> weeklyWeather = weatherToFrontService.getWeatherData();
         return ResponseEntity.ok(weeklyWeather);
     }
 

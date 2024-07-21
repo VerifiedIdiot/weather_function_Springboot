@@ -1,4 +1,4 @@
-package com.highlight.weather.refactored.enumClass;
+package com.highlight.weather.refactored.dto.weekly.enumClass;
 
 public enum CityEnum {
     // SEOUL_GYEONGGI

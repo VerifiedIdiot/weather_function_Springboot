@@ -63,7 +63,7 @@ public class WeatherController {
 //            Map<String, String> locationCode = middleWeatherService.getLocationCode();
             Map<String, List<List<String>>> middleTemp = middleWeatherService.getMiddleTemp(locationCode);
             Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition(locationCode);
-            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp,middleCondition);
+            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
 
             // 단기예보 + 중기예보
             Map<String, List<List<String>>> completeWeather = completeWeatherService.getCompleteWeather(completeShort, completeMiddle);
@@ -87,12 +87,11 @@ public class WeatherController {
     @GetMapping("/get")
     @Operation(summary = "날씨정보 조회", description = "데이터베이스에서 일주일에 해당하는 날씨정보를 요청 및 조회합니다.")
     @JsonView(Views.Public.class)
-    public ResponseEntity<Map<String, List<WeatherDto>>> getForcasts () {
+    public ResponseEntity<Map<String, List<WeatherDto>>> getForcasts() {
 
         Map<String, List<WeatherDto>> weeklyWeather = weatherToFrontService.getWeatherData();
         return ResponseEntity.ok(weeklyWeather);
     }
-
 
 
 //    @GetMapping("/get-by-client")

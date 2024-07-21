@@ -1,25 +1,25 @@
 package com.highlight.weather.refactored.entity;
 
-import com.highlight.weather.refactored.dto.WeatherDto;
+import com.highlight.weather.refactored.dto.weekly.WeeklyWeatherDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
 
-@Entity(name = "refactoredWeather")
-@Table(name = "weather_refactored_tb")
-@Getter @Setter
+@Entity(name = "weatherFunction")
+@Table(name = "weekly_weather_tb")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Weather {
+public class WeeklyWeather {
     @Id
-    @Column(name = "weather_refactored_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "weather_refactored_seq")
+    @Column(name = "weekly_weather_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "weekly_weather_seq")
     private Long id;
-    //    @Column(unique = true)
-    private String region ;
+    private String region;
 
     private int weatherDate;
 
@@ -36,12 +36,7 @@ public class Weather {
     private String afternoonWeatherCondition;
 
 
-
-
-
     private Date regDate;
-
-
 
 
     @PrePersist // DB에 INSERT 되기 전에 실행되는 메소드
@@ -50,8 +45,8 @@ public class Weather {
     }
 
 
-    public WeatherDto toDto() {
-        return WeatherDto.builder()
+    public WeeklyWeatherDto toDto() {
+        return WeeklyWeatherDto.builder()
                 .id(this.getId())
                 .region(this.getRegion())
                 .weatherDate(this.getWeatherDate())

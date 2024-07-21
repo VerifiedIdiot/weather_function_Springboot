@@ -6,14 +6,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-
-
 import java.util.Date;
 
 
 @Entity(name = "legacyWeather")
 @Table(name = "weather_legacy_tb")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,7 +22,7 @@ public class Weather {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "weather_legacy_seq")
     private Long id;
     //    @Column(unique = true)
-    private String region ;
+    private String region;
 
     private int weatherDate;
 
@@ -40,12 +39,7 @@ public class Weather {
     private String afternoonWeatherCondition;
 
 
-
-
-
     private Date regDate;
-
-
 
 
     @PrePersist // DB에 INSERT 되기 전에 실행되는 메소드

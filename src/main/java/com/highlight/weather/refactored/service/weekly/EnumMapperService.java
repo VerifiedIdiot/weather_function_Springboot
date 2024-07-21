@@ -1,7 +1,7 @@
-package com.highlight.weather.refactored.service.weather;
+package com.highlight.weather.refactored.service.weekly;
 
-import com.highlight.weather.refactored.enumClass.CityEnum;
-import com.highlight.weather.refactored.enumClass.RegionEnum;
+import com.highlight.weather.refactored.dto.weekly.enumClass.CityEnum;
+import com.highlight.weather.refactored.dto.weekly.enumClass.RegionEnum;
 
 import java.util.Arrays;
 import java.util.HashMap;

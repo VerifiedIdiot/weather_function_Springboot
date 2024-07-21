@@ -1,14 +1,19 @@
-package com.highlight.weather.refactored.service.weather;
+package com.highlight.weather.refactored.service.weekly;
 
+import com.highlight.weather.refactored.service.currentHourly.CurrentWeatherService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service("refactoredCompleteWeatherService")
 public class CompleteWeatherService {
+    private final Logger logger = LogManager.getLogger(this.getClass());
     public Map<String, List<List<String>>> getCompleteWeather(Map<String, List<List<String>>> completeShort, Map<String, List<List<String>>> completeMiddle) {
         try {
-            System.out.println("완전한 날씨 데이터 취합 시작");
+
+            logger.info("완전한 날씨 데이터 취합 시작");
             Map<String, List<List<String>>> completeWeather = new HashMap<>();
 
             // completeShort와 completeMiddle의 데이터 병합
@@ -21,7 +26,7 @@ public class CompleteWeatherService {
 //            System.out.println(completeWeather);
             return completeWeather;
         } catch (Exception e) {
-            System.out.println("완전한 날씨 데이터 취합 실패: " + e.getMessage());
+            logger.warn("완전한 날씨 데이터 취합 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }

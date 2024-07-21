@@ -20,6 +20,7 @@ public abstract class WeatherAbstract {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHH");
     protected RestTemplate restTemplate;
+
     public WeatherAbstract() {
         this.restTemplate = new RestTemplate();
     }
@@ -30,6 +31,7 @@ public abstract class WeatherAbstract {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
+
     protected String sendGetRequest(String url, Map<String, String> queryParams, HttpHeaders headers) {
 
         // 동적 URI 생성 파라미터로 전달받은 URI 정보를 바탕으로 새로운 인스턴스를 생성해서 간편하다 !!
@@ -46,6 +48,7 @@ public abstract class WeatherAbstract {
         }
         return response.getBody();
     }
+
     // 날짜 형식 변환 메소드
     private int formatDate(LocalDateTime dateTime) {
         return Integer.parseInt(dateTime.format(DATE_TIME_FORMATTER));

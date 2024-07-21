@@ -56,7 +56,6 @@ public class ShortWeatherService extends WeatherAbstract {
     }
 
 
-
     public Map<String, List<List<String>>> completeShort(Map<String, String> locationCode) {
         try {
             HttpHeaders headers = createHeaders(weatherApiKey);

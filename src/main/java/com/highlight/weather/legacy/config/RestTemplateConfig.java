@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
 
-
     // 스프링 2.X.X 에서 사용하던 RestTemplate()
     @Bean
     public RestTemplate restTemplate() {

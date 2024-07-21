@@ -1,7 +1,7 @@
-package com.highlight.weather.refactored.service.weather;
+package com.highlight.weather.refactored.service.weekly;
 
-import com.highlight.weather.refactored.dto.WeatherDto;
-import com.highlight.weather.refactored.entity.Weather;
+import com.highlight.weather.refactored.dto.weekly.WeeklyWeatherDto;
+import com.highlight.weather.refactored.entity.WeeklyWeather;
 import com.highlight.weather.refactored.repository.WeatherRepository;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -22,8 +22,10 @@ public class WeatherDataSaveService {
     private static final Logger logger = LogManager.getLogger(WeatherDataSaveService.class);
     @Autowired
     private WeatherRepository weatherRepository;
+
     public WeatherDataSaveService() {
     }
+
     private void deleteAllWeatherData() {
         long count = weatherRepository.count();
         if (count > 0) {
@@ -38,31 +40,31 @@ public class WeatherDataSaveService {
     public void saveWeatherData(Map<String, List<List<String>>> weatherData) {
         try {
             logger.debug("Starting to save weather data");
-            List<Weather> weathers = new ArrayList<>();
+            List<WeeklyWeather> weeklyWeathers = new ArrayList<>();
             for (Map.Entry<String, List<List<String>>> entry : weatherData.entrySet()) {
                 for (List<String> data : entry.getValue()) {
                     try {
-                        WeatherDto weatherDto = new WeatherDto();
+                        WeeklyWeatherDto weeklyWeatherDto = new WeeklyWeatherDto();
                         // 데이터 추출 및 DTO 설정
-                        weatherDto.setRegion(entry.getKey());
-                        weatherDto.setWeatherDate(Integer.parseInt(data.get(0)));
-                        weatherDto.setMorningTemperature(Integer.parseInt(data.get(1)));
-                        weatherDto.setMorningRainPercent(Integer.parseInt(data.get(2)));
-                        weatherDto.setMorningWeatherCondition(data.get(3));
-                        weatherDto.setAfternoonTemperature(Integer.parseInt(data.get(4)));
-                        weatherDto.setAfternoonRainPercent(Integer.parseInt(data.get(5)));
-                        weatherDto.setAfternoonWeatherCondition(data.get(6));
+                        weeklyWeatherDto.setRegion(entry.getKey());
+                        weeklyWeatherDto.setWeatherDate(Integer.parseInt(data.get(0)));
+                        weeklyWeatherDto.setMorningTemperature(Integer.parseInt(data.get(1)));
+                        weeklyWeatherDto.setMorningRainPercent(Integer.parseInt(data.get(2)));
+                        weeklyWeatherDto.setMorningWeatherCondition(data.get(3));
+                        weeklyWeatherDto.setAfternoonTemperature(Integer.parseInt(data.get(4)));
+                        weeklyWeatherDto.setAfternoonRainPercent(Integer.parseInt(data.get(5)));
+                        weeklyWeatherDto.setAfternoonWeatherCondition(data.get(6));
 
-                    Weather weather = weatherDto.toEntity();
-                    weathers.add(weather);
-                } catch (Exception e) {
+                        WeeklyWeather weeklyWeather = weeklyWeatherDto.toEntity();
+                        weeklyWeathers.add(weeklyWeather);
+                    } catch (Exception e) {
                         logger.error("Error parsing weather data: " + e.getMessage(), e);
-                    // 로그를 남기고, 오류 데이터는 스킵하거나 추가 조치를 취할 수 있음
+                        // 로그를 남기고, 오류 데이터는 스킵하거나 추가 조치를 취할 수 있음
                     }
                 }
             }
             deleteAllWeatherData();
-            weatherRepository.saveAll(weathers);
+            weatherRepository.saveAll(weeklyWeathers);
 
             logger.info("Weather data saved successfully");
         } catch (Exception e) {

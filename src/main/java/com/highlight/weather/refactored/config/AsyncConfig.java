@@ -7,6 +7,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+// 공공기관 API는 네트워크 지연 이슈가 잦습니다.
+// 동기적으로 처리할 시 지연된 시간 * 요청횟수 만큼의 지연시간이 발생하니 비동기 요청으로 해결합니다.
+// Tomcat의 default 스레드 200개 내에서 적당한 스레드풀을 조절합니다.
 @Configuration
 @EnableAsync
 public class AsyncConfig {

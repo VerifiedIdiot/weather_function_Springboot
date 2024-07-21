@@ -1,7 +1,9 @@
-package com.highlight.weather.refactored.service.weather;
+package com.highlight.weather.refactored.service.weekly;
 
-import com.highlight.weather.refactored.enumClass.CityEnum;
-import com.highlight.weather.refactored.enumClass.RegionEnum;
+import com.highlight.weather.refactored.dto.weekly.enumClass.CityEnum;
+import com.highlight.weather.refactored.dto.weekly.enumClass.RegionEnum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,9 +31,11 @@ public class MiddleWeatherService extends WeatherAbstract {
         super(webClient);
     }
 
+    private final Logger logger = LogManager.getLogger(this.getClass());
+
     public Map<String, String> getLocationCode() {
         try {
-            System.out.println("지역코드 가져오기 시작");
+            logger.info("지역코드 가져오기 시작");
             CompletableFuture<String> futureResponse = sendGetRequest(weatherLocationUrl, weatherApiKey, Collections.emptyMap());
             String response = futureResponse.join();
 
@@ -52,10 +56,10 @@ public class MiddleWeatherService extends WeatherAbstract {
                     }
                 }
             }
-            System.out.println("지역코드 가져오기 성공");
+            logger.info("지역코드 가져오기 성공");
             return locationCode;
         } catch (Exception e) {
-            System.out.println("지역코드 가져오기 실패: " + e.getMessage());
+            logger.warn("지역코드 가져오기 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }
@@ -63,7 +67,7 @@ public class MiddleWeatherService extends WeatherAbstract {
 
     public Map<String, List<List<String>>> getMiddleTemp(Map<String, String> locationCode) {
         try {
-            System.out.println("중기예보 온도 시작");
+            logger.info("중기예보 온도 시작");
 
             Map<String, Integer> dateParams = middleDaysParam();
 
@@ -87,7 +91,7 @@ public class MiddleWeatherService extends WeatherAbstract {
                     String[] targets = index.split("\\s+");
 
                     List<String> dailyTemp = new ArrayList<>();
-                    String date = targets[2].substring(0,8);
+                    String date = targets[2].substring(0, 8);
                     String minTemp = targets[6];
                     String maxTemp = targets[7];
 
@@ -101,10 +105,10 @@ public class MiddleWeatherService extends WeatherAbstract {
 //                System.out.println(middleTemp.get(cityName));
 
             }
-            System.out.println("중기예보 온도 성공");
+            logger.info("중기예보 온도 성공");
             return middleTemp;
         } catch (Exception e) {
-            System.out.println("중기예보 온도 실패: " + e.getMessage());
+            logger.warn("중기예보 온도 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }
@@ -114,7 +118,7 @@ public class MiddleWeatherService extends WeatherAbstract {
     public Map<String, List<List<String>>> getMiddleCondition(Map<String, String> locationCode) {
 
         try {
-            System.out.println("중기예보 날씨 시작");
+            logger.info("중기예보 날씨 시작");
             Map<String, Integer> dateParams = middleDaysParam();
             Map<String, List<List<String>>> middleCondition = new HashMap<>();
 
@@ -124,13 +128,12 @@ public class MiddleWeatherService extends WeatherAbstract {
 
                 Map<String, String> queryParams = middleQueryParams(regCode, dateParams);
 
-                CompletableFuture<String> futureResponse = sendGetRequest(condition7daysUrl, weatherApiKey, queryParams );
+                CompletableFuture<String> futureResponse = sendGetRequest(condition7daysUrl, weatherApiKey, queryParams);
                 String response = futureResponse.join(); // 또는 futureResponse.get();
                 String[] lines = response.split("\n");
 
 
                 String[] filterLines = Arrays.copyOfRange(lines, 2, lines.length - 1);
-
 
 
                 List<List<String>> regionCondition = new ArrayList<>();
@@ -166,10 +169,10 @@ public class MiddleWeatherService extends WeatherAbstract {
                 middleCondition.put(region.name(), regionCondition);
 //                System.out.println(middleCondition.get(region.name()));
             }
-            System.out.println("중기예보 날씨 성공");
+            logger.info("중기예보 날씨 성공");
             return middleCondition;
         } catch (Exception e) {
-            System.out.println("중기예보 날씨 실패: " + e.getMessage());
+            logger.warn("중기예보 날씨 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }
@@ -178,7 +181,7 @@ public class MiddleWeatherService extends WeatherAbstract {
     public Map<String, List<List<String>>> getCompleteMiddle(Map<String, List<List<String>>> middleTemp,
                                                              Map<String, List<List<String>>> middleCondition) {
         try {
-            System.out.println("중기예보 취합 시작");
+            logger.info("중기예보 취합 시작");
             // 최종적으로 통합된 날씨 데이터를 저장할 맵을 생성합니다.
             Map<String, List<List<String>>> completeMiddleWeather = new HashMap<>();
 
@@ -252,11 +255,11 @@ public class MiddleWeatherService extends WeatherAbstract {
                 // 최종적으로 통합된 도시별 날씨 데이터를 completeMiddleWeather 맵에 추가합니다.
                 completeMiddleWeather.put(city, new ArrayList<>(cityWeatherMap.values()));
             }
-            System.out.println("중기예보 취합 성공");
+            logger.info("중기예보 취합 성공");
 //            System.out.println(completeMiddleWeather);
             return completeMiddleWeather;
         } catch (Exception e) {
-            System.out.println("중기예보 취합 실패: " + e.getMessage());
+            logger.warn("중기예보 취합 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }

@@ -1,4 +1,4 @@
-package com.highlight.weather.refactored.enumClass;
+package com.highlight.weather.refactored.dto.weekly.enumClass;
 
 import lombok.Getter;
 

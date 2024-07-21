@@ -1,6 +1,8 @@
-package com.highlight.weather.refactored.service.weather;
+package com.highlight.weather.refactored.service.weekly;
 
-import com.highlight.weather.refactored.enumClass.CityEnum;
+import com.highlight.weather.refactored.dto.weekly.enumClass.CityEnum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 @Service("refactoredShortWeatherService")
 public class ShortWeatherService extends WeatherAbstract {
     @Value("${api.weatherLocation.url}")
@@ -30,10 +33,12 @@ public class ShortWeatherService extends WeatherAbstract {
         super(webClient);
     }
 
+    private final Logger logger = LogManager.getLogger(this.getClass());
+
     public Map<String, String> getLocationCode() {
         try {
 
-            System.out.println("지역코드 가져오기 시작");
+            logger.info("지역코드 가져오기 시작");
 
             CompletableFuture<String> futureResponse = sendGetRequest(weatherLocationUrl, weatherApiKey, Collections.emptyMap());
             String response = futureResponse.join(); // 또는 futureResponse.get();
@@ -56,15 +61,14 @@ public class ShortWeatherService extends WeatherAbstract {
                     }
                 }
             }
-            System.out.println("지역코드 가져오기 성공");
+            logger.info("지역코드 가져오기 성공");
             return locationCode;
         } catch (Exception e) {
-            System.out.println("지역코드 가져오기 실패: " + e.getMessage());
+            logger.warn("지역코드 가져오기 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }
     }
-
 
 
     public Map<String, List<List<String>>> completeShort(Map<String, String> locationCode) {
@@ -77,7 +81,7 @@ public class ShortWeatherService extends WeatherAbstract {
             LocalDate twoDaysLater = today.plusDays(2);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-            System.out.println("단기예보 취합 시작");
+            logger.info("단기예보 취합 시작");
 //            System.out.println(locationCode);
             for (Map.Entry<String, String> entry : locationCode.entrySet()) {
                 String cityName = entry.getKey();
@@ -136,10 +140,10 @@ public class ShortWeatherService extends WeatherAbstract {
                 completeShort.put(cityName, cityWeather);
             }
 
-            System.out.println("단기예보 취합 성공");
+            logger.info("단기예보 취합 성공");
             return completeShort;
         } catch (Exception e) {
-            System.out.println("단기예보 취합 실패: " + e.getMessage());
+            logger.warn("단기예보 취합 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyMap();
         }
@@ -160,7 +164,7 @@ public class ShortWeatherService extends WeatherAbstract {
             }
             return dataFields;
         } catch (Exception e) {
-            System.out.println("라인 파싱 실패: " + e.getMessage());
+            logger.warn("라인 파싱 실패: " + e.getMessage());
             e.printStackTrace();
             return Collections.emptyList();
         }

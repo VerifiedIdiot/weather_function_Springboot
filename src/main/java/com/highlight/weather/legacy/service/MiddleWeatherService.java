@@ -81,7 +81,7 @@ public class MiddleWeatherService extends WeatherAbstract {
                     String[] targets = index.split("\\s+");
 
                     List<String> dailyTemp = new ArrayList<>();
-                    String date = targets[2].substring(0,8);
+                    String date = targets[2].substring(0, 8);
                     String minTemp = targets[6];
                     String maxTemp = targets[7];
 
@@ -125,7 +125,6 @@ public class MiddleWeatherService extends WeatherAbstract {
 
 
                 String[] filterLines = Arrays.copyOfRange(lines, 2, lines.length - 1);
-
 
 
                 List<List<String>> regionCondition = new ArrayList<>();
