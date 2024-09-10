@@ -60,18 +60,18 @@ public class WeatherController {
 //            Map<String, String> locationCode = middleWeatherService.getLocationCode();
             Map<String, List<List<String>>> middleTemp = middleWeatherService.getMiddleTemp(locationCode);
             Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition(locationCode);
-            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
+//            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
+//
+////             단기예보 + 중기예보
+//            Map<String, List<List<String>>> completeWeather = completeWeatherService.getCompleteWeather(completeShort, completeMiddle);
 
-//             단기예보 + 중기예보
-            Map<String, List<List<String>>> completeWeather = completeWeatherService.getCompleteWeather(completeShort, completeMiddle);
-
-            // 각 도시별 일주일 날씨 정보 db에 insert
-            weatherDataSaveService.saveWeatherData(completeWeather);
+//             각 도시별 일주일 날씨 정보 db에 insert
+//            weatherDataSaveService.saveWeatherData(completeWeather);
 
             long endTime = System.currentTimeMillis();
             long duration = (endTime - startTime) / 1000;
             logger.info("Duration: " + duration + " seconds");
-            return ResponseEntity.ok(completeWeather);
+            return ResponseEntity.ok(middleCondition);
 
         } catch (Exception e) {
 

@@ -5,7 +5,6 @@ import com.highlight.weather.refactored.dto.currentHourly.HourlyWeatherResponseD
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -35,7 +34,6 @@ public class HourlyWeatherService {
     @Value("${api.hourlyWeather.apiKey}")
     private String hourlyWeatherApiKey;
 
-    @Autowired
     private final RestClient restClient;
 
     private final Logger logger = LogManager.getLogger(this.getClass());
@@ -79,9 +77,7 @@ public class HourlyWeatherService {
                     .uri(new URI(uri))
                     .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                     .retrieve()
-                    .toEntity(HourlyWeatherApiReqDto.class)
-                    .getBody();
-
+                    .body(HourlyWeatherApiReqDto.class);
             Map<String, HourlyWeatherResponseDto.WeatherDetail> weatherData = parseWeatherData(hourlyWeatherApiReqDto);
             return ResponseEntity.ok(weatherData);
         } catch (UnknownContentTypeException e) {

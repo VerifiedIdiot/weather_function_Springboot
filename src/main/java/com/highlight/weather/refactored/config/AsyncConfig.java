@@ -20,11 +20,11 @@ public class AsyncConfig {
 
         // CorePoolSize: 스레드 풀이 유지할 최소 스레드 수입니다.
         // 작업 수가 이 수를 초과하면 스레드가 추가로 생성됩니다.
-        executor.setCorePoolSize(5);
+        executor.setCorePoolSize(20);
 
         // MaxPoolSize: 스레드 풀이 관리할 수 있는 최대 스레드 수입니다.
         // 코어 스레드가 바쁠 때 추가 스레드가 생성되어 이 값을 최대로 할 수 있습니다.
-        executor.setMaxPoolSize(10);
+        executor.setMaxPoolSize(50);
 
         // QueueCapacity: 작업 대기열의 용량입니다. 이 큐가 가득 차면,
         // 새로운 작업을 위해 새 스레드가 생성됩니다(최대 MaxPoolSize까지).

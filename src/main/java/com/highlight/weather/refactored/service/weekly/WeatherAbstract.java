@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service("refactoredWeatherAbstract")
@@ -76,13 +77,16 @@ public abstract class WeatherAbstract {
         return dateParams;
     }
 
-    protected Map<String, String> middleQueryParams(String regCode, Map<String, Integer> dateParams) {
+    protected Map<String, String> middleQueryParams(Map<String, Integer> dateParams) {
         Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("reg", regCode);
+
+        // 날짜 파라미터 추가
         queryParams.put("tmef1", String.valueOf(dateParams.get("tomorrow")));
         queryParams.put("tmef2", String.valueOf(dateParams.get("sevenDaysAfter")));
         queryParams.put("help", "0");
-
+//        필요없어짐
+//        queryParams.put("reg", regCode);
         return queryParams;
     }
+
 }

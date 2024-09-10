@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: weather_func
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "weather.jar"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8111:8111"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/weather_func
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword

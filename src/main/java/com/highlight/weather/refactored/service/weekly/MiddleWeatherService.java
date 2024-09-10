@@ -79,7 +79,14 @@ public class MiddleWeatherService extends WeatherAbstract {
 
 //                System.out.println(cityName + " : " + regCode);
 
-                Map<String, String> queryParams = middleQueryParams(regCode, dateParams);
+                // regCode 없이 dateParams만 전달
+                Map<String, String> queryParams = middleQueryParams(dateParams);
+
+                // regCode가 존재하는 경우, queryParams에 추가
+                if (regCode != null && !regCode.isEmpty()) {
+                    queryParams.put("reg", regCode);
+                }
+
                 CompletableFuture<String> futureResponse = sendGetRequest(temperature7daysUrl, weatherApiKey, queryParams);
                 String response = futureResponse.join(); // 또는 futureResponse.get();
                 String[] lines = response.split("\n");
@@ -122,19 +129,18 @@ public class MiddleWeatherService extends WeatherAbstract {
             Map<String, Integer> dateParams = middleDaysParam();
             Map<String, List<List<String>>> middleCondition = new HashMap<>();
 
+            Map<String, String> queryParams = middleQueryParams(dateParams);
+
+            CompletableFuture<String> futureResponse = sendGetRequest(condition7daysUrl, weatherApiKey, queryParams);
+            String response = futureResponse.join(); // 또는 futureResponse.get();
+            logger.info(response);
+            String[] lines = response.split("\n");
+
+
+            String[] filterLines = Arrays.copyOfRange(lines, 2, lines.length - 1);
+
+
             for (RegionEnum region : RegionEnum.values()) {
-
-                String regCode = locationCode.get(region.getRegionName());
-
-                Map<String, String> queryParams = middleQueryParams(regCode, dateParams);
-
-                CompletableFuture<String> futureResponse = sendGetRequest(condition7daysUrl, weatherApiKey, queryParams);
-                String response = futureResponse.join(); // 또는 futureResponse.get();
-                String[] lines = response.split("\n");
-
-
-                String[] filterLines = Arrays.copyOfRange(lines, 2, lines.length - 1);
-
 
                 List<List<String>> regionCondition = new ArrayList<>();
 
