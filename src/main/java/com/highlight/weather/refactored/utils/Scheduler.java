@@ -6,6 +6,7 @@ import com.highlight.weather.refactored.service.weekly.MiddleWeatherService;
 import com.highlight.weather.refactored.service.weekly.ShortWeatherService;
 import com.highlight.weather.refactored.service.weekly.WeatherDataSaveService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.cache.CacheManager;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class Scheduler {
 
 
@@ -45,7 +47,7 @@ public class Scheduler {
 
             // 중기예보
             Map<String, List<List<String>>> middleTemp = middleWeatherService.getMiddleTemp(locationCode);
-            Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition(locationCode);
+            Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition();
             Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
 
             // 단기예보 + 중기예보

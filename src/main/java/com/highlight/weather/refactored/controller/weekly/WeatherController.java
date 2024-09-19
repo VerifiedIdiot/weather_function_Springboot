@@ -59,7 +59,7 @@ public class WeatherController {
             // 중기예보
 //            Map<String, String> locationCode = middleWeatherService.getLocationCode();
             Map<String, List<List<String>>> middleTemp = middleWeatherService.getMiddleTemp(locationCode);
-            Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition(locationCode);
+            Map<String, List<List<String>>> middleCondition = middleWeatherService.getMiddleCondition();
 //            Map<String, List<List<String>>> completeMiddle = middleWeatherService.getCompleteMiddle(middleTemp, middleCondition);
 //
 ////             단기예보 + 중기예보

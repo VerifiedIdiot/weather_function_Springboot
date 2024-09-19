@@ -2,6 +2,7 @@ package com.highlight.weather.refactored.service.weekly;
 
 import com.highlight.weather.refactored.dto.weekly.enumClass.CityEnum;
 import com.highlight.weather.refactored.dto.weekly.enumClass.RegionEnum;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("refactoredMiddleWeatherService")
+@Log4j2
 public class MiddleWeatherService extends WeatherAbstract {
 
     @Value("${api.weatherLocation.url}")
@@ -122,7 +124,7 @@ public class MiddleWeatherService extends WeatherAbstract {
     }
 
 
-    public Map<String, List<List<String>>> getMiddleCondition(Map<String, String> locationCode) {
+    public Map<String, List<List<String>>> getMiddleCondition() {
 
         try {
             logger.info("중기예보 날씨 시작");
